@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Wrench, Printer, Heart, Zap } from "lucide-react";
+import { Wrench, Printer, Heart, Zap, Cat } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 
@@ -71,7 +71,7 @@ export function Categories() {
       y: 0,
       transition: {
         duration: 0.6,
-        ease: "easeInOut",
+        ease: [0.42, 0, 0.58, 1] as [number, number, number, number],
       },
     },
   };
