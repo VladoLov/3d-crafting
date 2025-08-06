@@ -24,7 +24,7 @@ export function Hero() {
       y: 0,
       transition: {
         duration: 0.8,
-        ease: [0.42, 0, 0.58, 1] as [number, number, number, number],
+        ease: [0.25, 0.25, 0.25, 0.75] as [number, number, number, number],
       },
     },
   };
@@ -36,7 +36,7 @@ export function Hero() {
       transition: {
         duration: 6,
         repeat: Infinity,
-        ease: [0.42, 0, 0.58, 1] as [number, number, number, number],
+        ease: [0.25, 0.25, 0.25, 0.75] as [number, number, number, number],
       },
     },
   };
