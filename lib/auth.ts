@@ -1,19 +1,28 @@
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { db } from "./db";
+import { env } from "./env";
+
+const fixedPrismaAdapter = prismaAdapter(db, {
+  provider: "postgresql",
+  mapUser: (user) => ({
+    ...user,
+    // Ako je boolean, pretvori u null ili Date
+    emailVerified:
+      typeof user.emailVerified === "boolean" ? null : user.emailVerified,
+  }),
+});
 
 export const auth = betterAuth({
-  database: prismaAdapter(db, {
-    provider: "postgresql",
-  }),
+  database: fixedPrismaAdapter,
   emailAndPassword: {
     enabled: true,
-    requireEmailVerification: false, // Set to true in production
+    requireEmailVerification: false,
   },
   socialProviders: {
     google: {
-      clientId: process.env.GOOGLE_CLIENT_ID!,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+      clientId: env.GOOGLE_CLIENT_ID,
+      clientSecret: env.GOOGLE_CLIENT_SECRET,
     },
   },
   session: {
@@ -23,4 +32,5 @@ export const auth = betterAuth({
 });
 
 export type Session = typeof auth.$Infer.Session;
-export type User = (typeof auth.$Infer.Session)["user"];
+
+export type User = typeof auth.$Infer.Session.user;

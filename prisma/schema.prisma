@@ -1,32 +1,38 @@
+
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 // Auth Models
-model User {
-  id        String   @id @default(cuid())
-  email     String   @unique
-  name      String?
-  avatar    String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
 
-  // Relations
-  orders    Order[]
+model User {
+  id             String     @id @default(cuid())
+  name           String?
+  email          String?    @unique
+  emailVerified Boolean  @default(true)
+  image          String?
+  password       String?    // hashed lozinka (Better Auth ga automatski popunjava kod email/password registra)
+  createdAt      DateTime   @default(now())
+  updatedAt      DateTime   @updatedAt
+
+  accounts       Account[]
+  sessions       Session[]
+   orders    Order[]
   designs   Design[]
-  sessions  Session[]
-  accounts  Account[]
+  verificationTokens VerificationToken[]
 
   @@map("users")
 }
 
+
 model Account {
-  id                String  @id @default(cuid())
+  id                String   @id @default(cuid())
   userId            String
   type              String
   provider          String
@@ -50,20 +56,24 @@ model Session {
   sessionToken String   @unique
   userId       String
   expires      DateTime
-  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("sessions")
 }
 
 // Product Models
+
 model Category {
-  id          String    @id @default(cuid())
+  id          String   @id @default(cuid())
   name        String
-  slug        String    @unique
+  slug        String   @unique
   description String?
   image       String?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
   products Product[]
 
@@ -89,18 +99,19 @@ model Product {
 }
 
 // Order Models
-model Order {
-  id          String      @id @default(cuid())
-  userId      String
-  status      OrderStatus @default(PENDING)
-  total       Decimal     @db.Decimal(10, 2)
-  notes       String?
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime    @updatedAt
 
-  user       User        @relation(fields: [userId], references: [id])
-  items      OrderItem[]
-  designs    Design[]
+model Order {
+  id        String      @id @default(cuid())
+  userId    String
+  status    OrderStatus @default(PENDING)
+  total     Decimal     @db.Decimal(10, 2)
+  notes     String?
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+
+  user    User        @relation(fields: [userId], references: [id])
+  items   OrderItem[]
+  designs Design[]
 
   @@map("orders")
 }
@@ -119,17 +130,18 @@ model OrderItem {
 }
 
 // Design Models
+
 model Design {
-  id          String     @id @default(cuid())
-  userId      String
-  orderId     String?
-  name        String
-  type        DesignType
-  fileUrl     String
+  id           String     @id @default(cuid())
+  userId       String
+  orderId      String?
+  name         String
+  type         DesignType
+  fileUrl      String
   thumbnailUrl String?
-  metadata    Json?
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
+  metadata     Json?
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
 
   user  User   @relation(fields: [userId], references: [id])
   order Order? @relation(fields: [orderId], references: [id])
@@ -150,4 +162,25 @@ enum DesignType {
   CNC
   PRINT_3D
   WEDDING
+}
+
+model Verification {
+  id         String    @id
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime?
+  updatedAt  DateTime?
+
+  @@map("verification")
+}
+// Verification Token
+// ==================
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  user   User?   @relation(fields: [identifier], references: [email])
+  @@map("verification_tokens")
 }

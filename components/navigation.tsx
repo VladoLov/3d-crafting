@@ -3,12 +3,13 @@
 import { useState } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-import { ShoppingCart, Menu, X, User, Search } from "lucide-react";
+import { Menu, X, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { ProtectedCartButton } from "@/components/cart/protected-cart-button";
+import { UserMenu } from "@/components/auth/user-menu";
 
 export function Navigation() {
   const [isOpen, setIsOpen] = useState(false);
-  const [cartCount] = useState(0); // TODO: Connect to cart store
 
   const navItems = [
     { name: "Početna", href: "/" },
@@ -20,14 +21,14 @@ export function Navigation() {
   ];
 
   return (
-    <nav className="fixed top-0 w-full bg-white backdrop-blur-md z-50 border-b border-gray-100">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+    <nav className="fixed top-0 w-full bg-white/95 backdrop-blur-md z-50 border-b border-gray-100">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <Link href="/" className="flex items-center space-x-2">
             <motion.div
               whileHover={{ scale: 1.05 }}
-              className="text-2xl font-display font-bold text-violet-600"
+              className="text-2xl font-display font-bold text-primary-600"
             >
               Vlado
             </motion.div>
@@ -39,7 +40,7 @@ export function Navigation() {
               <Link
                 key={item.name}
                 href={item.href}
-                className="text-gray-700 hover:text-violet-600 transition-colors duration-200 font-medium"
+                className="text-gray-700 hover:text-primary-600 transition-colors duration-200 font-medium"
               >
                 {item.name}
               </Link>
@@ -52,22 +53,8 @@ export function Navigation() {
               <Search className="h-5 w-5" />
             </Button>
 
-            <Button variant="ghost" size="sm">
-              <User className="h-5 w-5" />
-            </Button>
-
-            <Button variant="ghost" size="sm" className="relative">
-              <ShoppingCart className="h-5 w-5" />
-              {cartCount > 0 && (
-                <motion.span
-                  initial={{ scale: 0 }}
-                  animate={{ scale: 1 }}
-                  className="absolute -top-2 -right-2 bg-violet-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center"
-                >
-                  {cartCount}
-                </motion.span>
-              )}
-            </Button>
+            <UserMenu />
+            <ProtectedCartButton />
 
             {/* Mobile menu button */}
             <Button
@@ -105,7 +92,7 @@ export function Navigation() {
                 >
                   <Link
                     href={item.href}
-                    className="block text-gray-700 hover:text-violet-600 transition-colors duration-200 font-medium"
+                    className="block text-gray-700 hover:text-primary-600 transition-colors duration-200 font-medium"
                     onClick={() => setIsOpen(false)}
                   >
                     {item.name}

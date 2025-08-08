@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Wrench, Printer, Heart, Zap, Cat } from "lucide-react";
+import { Wrench, Printer, Heart, Zap } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 

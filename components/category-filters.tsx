@@ -168,7 +168,7 @@ export function CategoryFilters({
                 >
                   <Checkbox
                     checked={searchParams.material?.includes(material) || false}
-                    onCheckedChange={(checked: boolean) => {
+                    onCheckedChange={(checked) => {
                       const current = searchParams.material?.split(",") || [];
                       const updated = checked
                         ? [...current, material]

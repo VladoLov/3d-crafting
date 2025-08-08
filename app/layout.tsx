@@ -4,6 +4,8 @@ import "./globals.css";
 import { Providers } from "./providers";
 import { Navigation } from "@/components/navigation";
 import { Footer } from "@/components/footer";
+import { ProtectedCartSidebar } from "@/components/cart/protected-cart-sidebar";
+import { Toaster } from "sonner";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -34,6 +36,8 @@ export default function RootLayout({
           <Navigation />
           <main className="pt-16">{children}</main>
           <Footer />
+          <ProtectedCartSidebar />
+          <Toaster position="top-right" />
         </Providers>
       </body>
     </html>

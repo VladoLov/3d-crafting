@@ -50,6 +50,7 @@ const categories = {
         reviews: 156,
         images: ["/engraved-glass.png"],
         category: "Graviranje",
+        badge: "Bestseller",
         description: "Elegantna čaša s personalnim graviranjem",
         materials: ["Staklo", "Kristal"],
         sizes: ["250ml", "350ml", "500ml"],
@@ -168,9 +169,9 @@ const categories = {
 };
 
 interface CategoryPageProps {
-  params: {
+  params: Promise<{
     slug: string;
-  };
+  }>;
   searchParams: {
     sort?: string;
     filter?: string;
@@ -179,11 +180,12 @@ interface CategoryPageProps {
   };
 }
 
-export default function CategoryPage({
+export default async function CategoryPage({
   params,
   searchParams,
 }: CategoryPageProps) {
-  const category = categories[params.slug as keyof typeof categories];
+  const { slug } = await params;
+  const category = categories[slug as keyof typeof categories];
 
   if (!category) {
     notFound();
@@ -222,8 +224,13 @@ export function generateStaticParams() {
   ];
 }
 
-export function generateMetadata({ params }: { params: { slug: string } }) {
-  const category = categories[params.slug as keyof typeof categories];
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
+  const { slug } = await params;
+  const category = categories[slug as keyof typeof categories];
 
   if (!category) {
     return {
