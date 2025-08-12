@@ -16,9 +16,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-
-import { BillingAddress } from "@/lib/types/checkout";
 import { useCheckoutStore } from "@/lib/store/checkout-store";
+import { BillingAddress } from "@/lib/types/checkout";
 
 const billingSchema = z
   .object({

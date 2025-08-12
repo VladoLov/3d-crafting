@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { easeIn, motion } from "framer-motion";
 import { Wrench, Printer, Heart, Zap } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -70,21 +70,21 @@ export function Categories() {
       opacity: 1,
       y: 0,
       transition: {
-        duration: 0.6,
-        ease: [0.25, 0.25, 0.25, 0.75] as [number, number, number, number],
+        duration: 1,
+        ease: easeIn,
       },
     },
   };
 
   return (
     <section className="section-padding bg-gray-50">
-      <div className="max-w-7xl mx-auto py-12">
+      <div className="max-w-7xl mx-auto">
         {/* Section Header */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
+          transition={{ duration: 1, ease: easeIn }}
           className="text-center mb-16"
         >
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-display font-bold text-gray-900 mb-4">
@@ -114,16 +114,16 @@ export function Categories() {
                 className="group"
               >
                 <Link href={category.href}>
-                  <div className="card hover:shadow-xl transition-all duration-300 h-full">
+                  <div className="card hover:shadow-xl transition-all duration-700 h-full">
                     {/* Image */}
                     <div className="relative overflow-hidden rounded-lg mb-6">
                       <img
                         src={category.image || "/placeholder.svg"}
                         alt={category.name}
-                        className="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-110"
+                        className="w-full h-48 object-cover transition-transform duration-700 group-hover:scale-110"
                       />
                       <div
-                        className={`absolute inset-0 bg-gradient-to-t ${category.color} opacity-20 group-hover:opacity-30 transition-opacity duration-300`}
+                        className={`absolute inset-0 bg-gradient-to-t ${category.color} opacity-20 group-hover:opacity-30 transition-opacity duration-700`}
                       />
                     </div>
 
@@ -137,7 +137,7 @@ export function Categories() {
                     </div>
 
                     {/* Content */}
-                    <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-violet-600 transition-colors duration-200">
+                    <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-primary-600 transition-colors duration-700">
                       {category.name}
                     </h3>
                     <p className="text-gray-600 mb-6 leading-relaxed">
@@ -147,7 +147,7 @@ export function Categories() {
                     {/* CTA */}
                     <Button
                       variant="outline"
-                      className="w-full group-hover:bg-violet-50 group-hover:border-violet-200 transition-colors duration-200"
+                      className="w-full group-hover:bg-primary-50 group-hover:border-primary-200 transition-colors duration-700"
                     >
                       Saznajte Više
                     </Button>

@@ -12,9 +12,8 @@ import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Textarea } from "@/components/ui/textarea";
 import { useCheckoutStore } from "@/lib/store/checkout-store";
-
-import { formatPrice } from "@/lib/utils";
 import { PaymentMethod } from "@/lib/types/checkout";
+import { formatPrice } from "@/lib/utils";
 
 const paymentSchema = z
   .object({

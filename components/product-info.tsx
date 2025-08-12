@@ -18,6 +18,7 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
 import { formatPrice } from "@/lib/utils";
+import { AddToCartButton } from "@/components/cart/add-to-cart-button";
 
 interface ProductInfoProps {
   product: any; // Replace with proper type
@@ -39,18 +40,6 @@ export function ProductInfo({ product }: ProductInfoProps) {
       price += product.sizes[selectedSize].price;
     }
     return price * quantity;
-  };
-
-  const handleAddToCart = () => {
-    // TODO: Implement cart functionality
-    console.log("Add to cart:", {
-      product: product.id,
-      material: product.materials?.[selectedMaterial],
-      size: product.sizes?.[selectedSize],
-      quantity,
-      customText,
-      price: calculatePrice(),
-    });
   };
 
   return (
@@ -235,15 +224,15 @@ export function ProductInfo({ product }: ProductInfoProps) {
 
       {/* Actions */}
       <div className="space-y-4">
-        <Button
-          onClick={handleAddToCart}
-          className="w-full bg-primary-500 hover:bg-primary-600 text-white py-3"
-          size="lg"
+        <AddToCartButton
+          product={product}
+          selectedMaterial={product.materials?.[selectedMaterial]}
+          selectedSize={product.sizes?.[selectedSize]}
+          quantity={quantity}
+          customText={customText}
           disabled={!product.inStock}
-        >
-          <ShoppingCart className="h-5 w-5 mr-2" />
-          {product.inStock ? "Dodaj u košaricu" : "Nema na zalihi"}
-        </Button>
+          className="w-full bg-primary-500 hover:bg-primary-600 text-white py-3"
+        />
 
         <div className="flex space-x-3">
           <Button

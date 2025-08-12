@@ -1,8 +1,8 @@
 "use client";
 
-import { useCheckoutStore } from "@/lib/store/checkout-store";
 import { motion } from "framer-motion";
 import { Check, Truck, CreditCard, ShoppingBag, User } from "lucide-react";
+import { useCheckoutStore } from "@/lib/store/checkout-store";
 
 const steps = [
   {

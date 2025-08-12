@@ -12,11 +12,10 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-
+import { useCheckoutStore } from "@/lib/store/checkout-store";
 import { useCartStore } from "@/lib/store/cart-store";
 import { formatPrice } from "@/lib/utils";
 import { toast } from "sonner";
-import { useCheckoutStore } from "@/lib/store/checkout-store";
 
 interface OrderConfirmationProps {
   onBack: () => void;

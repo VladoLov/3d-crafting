@@ -24,7 +24,7 @@ export function RelatedProducts({
       price: 45.99,
       rating: 4.9,
       reviews: 89,
-      image: "/engraved-plaque.png",
+      image: "/engraved-plaque.jpg",
       category: "Graviranje",
       badge: "Novo",
     },
@@ -35,7 +35,7 @@ export function RelatedProducts({
       price: 18.99,
       rating: 4.7,
       reviews: 156,
-      image: "/engraved-glass.png",
+      image: "/engraved-glass.jpg",
       category: "Graviranje",
     },
     {
@@ -45,7 +45,7 @@ export function RelatedProducts({
       price: 125.99,
       rating: 4.8,
       reviews: 43,
-      image: "/cnc-metal-parts.png",
+      image: "/cnc-metal-parts.jpg",
       category: "CNC Obrada",
     },
   ].filter((product) => product.id !== currentProduct.id);

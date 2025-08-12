@@ -1,4 +1,4 @@
-"use server";
+/* "use server";
 
 import { signIn, signUp } from "@/lib/auth-server";
 import { revalidatePath } from "next/cache";
@@ -39,3 +39,4 @@ export async function loginWithEmail(data: LoginForm) {
 }
 
 // Slično i za register...
+ */

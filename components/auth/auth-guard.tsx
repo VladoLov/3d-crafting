@@ -1,54 +1,49 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useSession } from "@/lib/auth-client";
-import { AuthModal } from "./auth-modal";
+import type React from "react";
+
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
+import { Loader2 } from "lucide-react";
 
 interface AuthGuardProps {
   children: React.ReactNode;
-  fallback?: React.ReactNode;
-  requireAuth?: boolean;
+  requireAdmin?: boolean;
 }
 
-export function AuthGuard({
-  children,
-  fallback,
-  requireAuth = true,
-}: AuthGuardProps) {
-  const { data: session, isPending } = useSession();
-  const [showAuthModal, setShowAuthModal] = useState(false);
+export function AuthGuard({ children, requireAdmin = false }: AuthGuardProps) {
+  const { data: session, status } = useSession();
+  const router = useRouter();
 
   useEffect(() => {
-    if (!isPending && requireAuth && !session) {
-      setShowAuthModal(true);
-    }
-  }, [session, isPending, requireAuth]);
+    if (status === "loading") return;
 
-  if (isPending) {
+    if (!session) {
+      router.push("/auth/signin");
+      return;
+    }
+
+    if (requireAdmin && session.user.role !== "admin") {
+      router.push("/");
+      return;
+    }
+  }, [session, status, router, requireAdmin]);
+
+  if (status === "loading") {
     return (
-      <div className="flex items-center justify-center p-8">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-500"></div>
+      <div className="flex items-center justify-center min-h-screen">
+        <Loader2 className="h-8 w-8 animate-spin" />
       </div>
     );
   }
 
-  if (requireAuth && !session) {
-    return (
-      <>
-        {fallback || (
-          <div className="text-center p-8">
-            <p className="text-gray-600">
-              Morate se prijaviti da biste pristupili ovoj stranici.
-            </p>
-          </div>
-        )}
-        <AuthModal
-          isOpen={showAuthModal}
-          onClose={() => setShowAuthModal(false)}
-          onSuccess={() => setShowAuthModal(false)}
-        />
-      </>
-    );
+  if (!session) {
+    return null;
+  }
+
+  if (requireAdmin && session.user.role !== "admin") {
+    return null;
   }
 
   return <>{children}</>;

@@ -14,9 +14,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-
-import { ShippingAddress } from "@/lib/types/checkout";
 import { useCheckoutStore } from "@/lib/store/checkout-store";
+import { ShippingAddress } from "@/lib/types/checkout";
 
 const shippingSchema = z.object({
   firstName: z.string().min(2, "Ime mora imati najmanje 2 znaka"),

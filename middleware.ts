@@ -1,60 +1,34 @@
-import { betterFetch } from "@better-fetch/fetch";
-import type { Session } from "@/lib/auth";
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
+import authConfig from "./auth.config";
+import NextAuth from "next-auth";
 
-export default async function authMiddleware(request: NextRequest) {
-  const { data: session } = await betterFetch<Session>(
-    "/api/auth/get-session",
-    {
-      baseURL: request.nextUrl.origin,
-      headers: {
-        cookie: request.headers.get("cookie") || "",
-      },
+const { auth } = NextAuth(authConfig);
+export default auth(async function middleware(req) {
+  const { nextUrl } = req;
+  const isLoggedIn = !!req.auth;
+  const isAdmin = (req.auth?.user?.role || "") === "admin";
+
+  // Admin routes
+  /* if (nextUrl.pathname.startsWith("/admin")) {
+    if (!isLoggedIn) {
+      return NextResponse.redirect(new URL("/auth/signin", nextUrl));
     }
-  );
-
-  // Protected routes that require authentication
-  const protectedRoutes = ["/kosara", "/checkout", "/profil", "/narudzbe"];
-  const adminRoutes = ["/admin"];
-
-  const isProtectedRoute = protectedRoutes.some((route) =>
-    request.nextUrl.pathname.startsWith(route)
-  );
-
-  const isAdminRoute = adminRoutes.some((route) =>
-    request.nextUrl.pathname.startsWith(route)
-  );
-
-  // Redirect to home if accessing protected route without session
-  if (isProtectedRoute && !session) {
-    return NextResponse.redirect(new URL("/", request.url));
-  }
-
-  // For admin routes, check if user has admin role (mock check for now)
-  if (isAdminRoute) {
-    if (!session) {
-      return NextResponse.redirect(new URL("/", request.url));
-    }
-
-    // Mock admin check - in real app, check user role from database
-    const isAdmin =
-      session.user.email === "admin@vlado.hr" ||
-      session.user.email?.includes("admin");
-
     if (!isAdmin) {
-      return NextResponse.redirect(new URL("/", request.url));
+      return NextResponse.redirect(new URL("/", nextUrl));
+    }
+  } */
+
+  // Protected routes
+  const protectedRoutes = ["/profil", "/narudzbe", "/checkout"];
+  if (protectedRoutes.some((route) => nextUrl.pathname.startsWith(route))) {
+    if (!isLoggedIn) {
+      return NextResponse.redirect(new URL("/auth/signin", nextUrl));
     }
   }
 
   return NextResponse.next();
-}
+});
 
 export const config = {
-  matcher: [
-    "/korpa/:path*",
-    "/checkout/:path*",
-    "/profil/:path*",
-    "/narudzbe/:path*",
-    "/admin/:path*",
-  ],
+  matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
 };

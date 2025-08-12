@@ -1,116 +1,126 @@
 "use client";
 
+import type React from "react";
+
 import { useState } from "react";
+import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useSession, signIn, signUp, signOut } from "@/lib/auth-client";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { toast } from "sonner";
 
-export default function TestAuthPage() {
-  const { data: session, isPending } = useSession();
+export default function SignInPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [name, setName] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
 
-  const handleSignUp = async () => {
+  const handleCredentialsSignIn = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
+
     try {
-      const result = await signUp.email({
+      const result = await signIn("credentials", {
         email,
         password,
-        name,
+        redirect: false,
       });
 
-      if (result.error) {
-        toast.error(result.error.message);
-      } else {
-        toast.success("Registracija uspješna!");
-      }
-    } catch (error) {
-      toast.error("Greška pri registraciji");
-      console.error(error);
-    }
-  };
-
-  const handleSignIn = async () => {
-    try {
-      const result = await signIn.email({
-        email,
-        password,
-      });
-
-      if (result.error) {
-        toast.error(result.error.message);
+      if (result?.error) {
+        toast.error("Neispravni podaci za prijavu");
       } else {
         toast.success("Prijava uspješna!");
+        router.push("/");
+        router.refresh();
       }
     } catch (error) {
       toast.error("Greška pri prijavi");
       console.error(error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  const handleSignOut = async () => {
+  const handleGoogleSignIn = async () => {
+    setIsLoading(true);
     try {
-      await signOut({
-        fetchOptions: {
-          onSuccess: () => {
-            toast.success("Odjava uspješna!");
-          },
-        },
-      });
+      await signIn("google", { callbackUrl: "/" });
     } catch (error) {
-      toast.error("Greška pri odjavi");
+      toast.error("Greška pri Google prijavi");
       console.error(error);
+    } finally {
+      setIsLoading(false);
     }
   };
-
-  if (isPending) {
-    return <div className="p-8">Loading...</div>;
-  }
 
   return (
-    <div className="max-w-md mx-auto p-8 space-y-4">
-      <h1 className="text-2xl font-bold">Test Authentication</h1>
+    <div className="container mx-auto py-8 flex items-center justify-center min-h-[80vh]">
+      <Card className="w-full max-w-md">
+        <CardHeader>
+          <CardTitle>Prijava</CardTitle>
+          <CardDescription>Prijavite se na svoj račun</CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <form onSubmit={handleCredentialsSignIn} className="space-y-4">
+            <Input
+              type="email"
+              placeholder="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+            <Input
+              type="password"
+              placeholder="Lozinka"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+            <Button type="submit" className="w-full" disabled={isLoading}>
+              {isLoading ? "Prijavljujem..." : "Prijavi se"}
+            </Button>
+          </form>
 
-      {session ? (
-        <div className="space-y-4">
-          <div className="p-4 bg-green-50 rounded-lg">
-            <h2 className="font-semibold">Prijavljeni ste kao:</h2>
-            <p>Ime: {session.user.name}</p>
-            <p>Email: {session.user.email}</p>
-            <p>ID: {session.user.id}</p>
+          <div className="relative">
+            <div className="absolute inset-0 flex items-center">
+              <span className="w-full border-t" />
+            </div>
+            <div className="relative flex justify-center text-xs uppercase">
+              <span className="bg-background px-2 text-muted-foreground">
+                Ili
+              </span>
+            </div>
           </div>
-          <Button onClick={handleSignOut} variant="destructive">
-            Odjavi se
+
+          <Button
+            type="button"
+            variant="outline"
+            className="w-full bg-transparent"
+            onClick={handleGoogleSignIn}
+            disabled={isLoading}
+          >
+            {isLoading ? "Prijavljujem..." : "Prijavi se s Google"}
           </Button>
-        </div>
-      ) : (
-        <div className="space-y-4">
-          <Input
-            placeholder="Ime"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-          />
-          <Input
-            placeholder="Email"
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-          <Input
-            placeholder="Password"
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-          <div className="flex space-x-2">
-            <Button onClick={handleSignUp}>Registriraj se</Button>
-            <Button onClick={handleSignIn} variant="outline">
-              Prijavi se
+
+          <div className="text-center text-sm">
+            <span className="text-muted-foreground">Nemate račun? </span>
+            <Button
+              variant="link"
+              className="p-0 h-auto"
+              onClick={() => router.push("/test-auth")}
+            >
+              Registrirajte se
             </Button>
           </div>
-        </div>
-      )}
+        </CardContent>
+      </Card>
     </div>
   );
 }

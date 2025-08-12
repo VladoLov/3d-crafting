@@ -40,7 +40,7 @@ export function FeaturedProducts() {
     },
     {
       id: "4",
-      name: "3D Prsten",
+      name: "Svadbeni Prsteni Držač",
       price: 45.99,
       rating: 5.0,
       reviews: 156,
@@ -66,7 +66,7 @@ export function FeaturedProducts() {
       opacity: 1,
       y: 0,
       transition: {
-        duration: 0.6,
+        duration: 0.7,
         ease: [0.25, 0.25, 0.25, 0.75] as [number, number, number, number],
       },
     },
@@ -74,7 +74,7 @@ export function FeaturedProducts() {
 
   return (
     <section className="section-padding">
-      <div className="max-w-7xl mx-auto py-4">
+      <div className="max-w-7xl mx-auto">
         {/* Section Header */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -105,25 +105,25 @@ export function FeaturedProducts() {
               key={product.id}
               variants={cardVariants}
               whileHover={{ y: -5 }}
-              className="group bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300"
+              className="group bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-700"
             >
               {/* Image Container */}
               <div className="relative overflow-hidden">
                 <img
                   src={product.image || "/placeholder.svg"}
                   alt={product.name}
-                  className="w-full h-64 object-cover transition-transform duration-300 group-hover:scale-110"
+                  className="w-full h-64 object-cover transition-transform duration-700 group-hover:scale-110"
                 />
 
                 {/* Badge */}
                 <div className="absolute top-3 left-3">
-                  <span className="px-2 py-1 bg-violet-500 text-white text-xs font-medium rounded-full">
+                  <span className="px-2 py-1 bg-primary-500 text-white text-xs font-medium rounded-full">
                     {product.badge}
                   </span>
                 </div>
 
                 {/* Hover Actions */}
-                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center space-x-3">
+                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-700 flex items-center justify-center space-x-3">
                   <Button
                     size="sm"
                     variant="secondary"
@@ -133,7 +133,7 @@ export function FeaturedProducts() {
                   </Button>
                   <Button
                     size="sm"
-                    className="bg-violet-500 hover:bg-violet-600"
+                    className="bg-primary-500 hover:bg-primary-600"
                   >
                     <ShoppingCart className="h-4 w-4" />
                   </Button>
@@ -143,12 +143,12 @@ export function FeaturedProducts() {
               {/* Content */}
               <div className="p-6">
                 {/* Category */}
-                <div className="text-sm text-violet-600 font-medium mb-2">
+                <div className="text-sm text-primary-600 font-medium mb-2">
                   {product.category}
                 </div>
 
                 {/* Title */}
-                <h3 className="text-lg font-bold text-gray-900 mb-2 group-hover:text-violet-600 transition-colors duration-200">
+                <h3 className="text-lg font-bold text-gray-900 mb-2 group-hover:text-primary-600 transition-colors duration-700">
                   {product.name}
                 </h3>
 

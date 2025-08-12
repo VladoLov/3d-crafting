@@ -58,7 +58,7 @@ export function Footer() {
                 href="/"
                 className="text-2xl font-display font-bold text-primary-400 mb-4 block"
               >
-                Vlado
+                Craft Shop
               </Link>
               <p className="text-gray-300 mb-6 leading-relaxed">
                 Specijalizirani smo za graviranje, CNC obradu, 3D print i
@@ -70,15 +70,15 @@ export function Footer() {
               <div className="space-y-3">
                 <div className="flex items-center space-x-3">
                   <Mail className="h-5 w-5 text-primary-400" />
-                  <span className="text-gray-300">info@vlado-webshop.hr</span>
+                  <span className="text-gray-300">info@craft-webshop.ba</span>
                 </div>
                 <div className="flex items-center space-x-3">
                   <Phone className="h-5 w-5 text-primary-400" />
-                  <span className="text-gray-300">+385 1 234 5678</span>
+                  <span className="text-gray-300">+387 61 234 5678</span>
                 </div>
                 <div className="flex items-center space-x-3">
                   <MapPin className="h-5 w-5 text-primary-400" />
-                  <span className="text-gray-300">Zagreb, Hrvatska</span>
+                  <span className="text-gray-300">Breza, BiH</span>
                 </div>
               </div>
             </motion.div>
@@ -119,7 +119,7 @@ export function Footer() {
           className="border-t border-gray-800 mt-12 pt-8 flex flex-col md:flex-row items-center justify-between"
         >
           <p className="text-gray-400 text-sm mb-4 md:mb-0">
-            © 2024 Vlado Webshop. Sva prava pridržana.
+            © 2024 Craft Webshop. Sva prava pridržana.
           </p>
 
           {/* Social Links */}

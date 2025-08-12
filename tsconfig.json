@@ -27,7 +27,7 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "app/korpa"
+    "app/kosara"
   ],
   "exclude": ["node_modules"]
 }

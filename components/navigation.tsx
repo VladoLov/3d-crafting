@@ -1,108 +1,114 @@
 "use client";
 
 import { useState } from "react";
+import { useSession, SessionProvider } from "next-auth/react";
 import Link from "next/link";
-import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ProtectedCartButton } from "@/components/cart/protected-cart-button";
 import { UserMenu } from "@/components/auth/user-menu";
+import { AuthModal } from "@/components/auth/auth-modal";
+import { Menu, X } from "lucide-react";
 
 export function Navigation() {
-  const [isOpen, setIsOpen] = useState(false);
+  const session = useSession();
+  const [showAuthModal, setShowAuthModal] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const navItems = [
-    { name: "Početna", href: "/" },
-    { name: "Graviranje", href: "/kategorije/graviranje" },
-    { name: "CNC Obrada", href: "/kategorije/cnc" },
-    { name: "3D Print", href: "/kategorije/3d-print" },
-    { name: "Svadbe", href: "/kategorije/svadbe" },
-    { name: "O nama", href: "/o-nama" },
+    { href: "/", label: "Početna" },
+    { href: "/kategorije/graviranje", label: "Graviranje" },
+    { href: "/kategorije/cnc", label: "CNC" },
+    { href: "/kategorije/3d-print", label: "3D Print" },
+    { href: "/kategorije/svadbe", label: "Svadbe" },
+    { href: "/o-nama", label: "O nama" },
   ];
 
   return (
-    <nav className="fixed top-0 w-full bg-white/95 backdrop-blur-md z-50 border-b border-gray-100">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
-          {/* Logo */}
-          <Link href="/" className="flex items-center space-x-2">
-            <motion.div
-              whileHover={{ scale: 1.05 }}
-              className="text-2xl font-display font-bold text-primary-600"
-            >
-              Vlado
-            </motion.div>
-          </Link>
-
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-8">
-            {navItems.map((item) => (
-              <Link
-                key={item.name}
-                href={item.href}
-                className="text-gray-700 hover:text-primary-600 transition-colors duration-200 font-medium"
-              >
-                {item.name}
+    <SessionProvider>
+      <>
+        <nav className="bg-white shadow-sm border-b">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex justify-between items-center h-16">
+              {/* Logo */}
+              <Link href="/" className="flex-shrink-0">
+                <span className="text-2xl font-bold text-gray-900">
+                  CraftShop
+                </span>
               </Link>
-            ))}
-          </div>
 
-          {/* Right side actions */}
-          <div className="flex items-center space-x-4">
-            <Button variant="ghost" size="sm">
-              <Search className="h-5 w-5" />
-            </Button>
+              {/* Desktop Navigation */}
+              <div className="hidden md:block">
+                <div className="ml-10 flex items-baseline space-x-4">
+                  {navItems.map((item) => (
+                    <Link
+                      key={item.href}
+                      href={item.href}
+                      className="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium transition-colors"
+                    >
+                      {item.label}
+                    </Link>
+                  ))}
+                </div>
+              </div>
 
-            <UserMenu />
-            <ProtectedCartButton />
+              {/* Right side */}
+              <div className="flex items-center space-x-4">
+                <ProtectedCartButton />
 
-            {/* Mobile menu button */}
-            <Button
-              variant="ghost"
-              size="sm"
-              className="md:hidden"
-              onClick={() => setIsOpen(!isOpen)}
-            >
-              {isOpen ? (
-                <X className="h-5 w-5" />
-              ) : (
-                <Menu className="h-5 w-5" />
-              )}
-            </Button>
-          </div>
-        </div>
-      </div>
-
-      {/* Mobile Navigation */}
-      <AnimatePresence>
-        {isOpen && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
-            className="md:hidden bg-white border-t border-gray-100"
-          >
-            <div className="px-4 py-4 space-y-4">
-              {navItems.map((item, index) => (
-                <motion.div
-                  key={item.name}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: index * 0.1 }}
-                >
-                  <Link
-                    href={item.href}
-                    className="block text-gray-700 hover:text-primary-600 transition-colors duration-200 font-medium"
-                    onClick={() => setIsOpen(false)}
+                {session?.data?.user?.name ? (
+                  <UserMenu />
+                ) : (
+                  <Button
+                    onClick={() => setShowAuthModal(true)}
+                    variant="outline"
+                    size="sm"
                   >
-                    {item.name}
-                  </Link>
-                </motion.div>
-              ))}
+                    Prijava
+                  </Button>
+                )}
+
+                {/* Mobile menu button */}
+                <div className="md:hidden">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                  >
+                    {isMobileMenuOpen ? (
+                      <X className="h-6 w-6" />
+                    ) : (
+                      <Menu className="h-6 w-6" />
+                    )}
+                  </Button>
+                </div>
+              </div>
             </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </nav>
+
+            {/* Mobile Navigation */}
+            {isMobileMenuOpen && (
+              <div className="md:hidden">
+                <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                  {navItems.map((item) => (
+                    <Link
+                      key={item.href}
+                      href={item.href}
+                      className="text-gray-600 hover:text-gray-900 block px-3 py-2 rounded-md text-base font-medium"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                    >
+                      {item.label}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        </nav>
+
+        <AuthModal
+          isOpen={showAuthModal}
+          onClose={() => setShowAuthModal(false)}
+        />
+      </>
+    </SessionProvider>
   );
 }

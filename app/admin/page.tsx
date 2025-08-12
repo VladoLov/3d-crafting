@@ -8,6 +8,9 @@ import { useAdminStore } from "@/lib/store/admin-store";
 import { formatPrice, formatDate } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
+
 const statusColors = {
   pending: "bg-yellow-100 text-yellow-800",
   confirmed: "bg-blue-100 text-blue-800",
@@ -29,7 +32,10 @@ const statusLabels = {
 };
 
 export default function AdminDashboard() {
+  const redirect = useRouter();
   const { dashboardMetrics } = useAdminStore();
+  const { data: session } = useSession();
+  if (!session || session.user.role !== "admin") return null;
 
   if (!dashboardMetrics) return null;
 

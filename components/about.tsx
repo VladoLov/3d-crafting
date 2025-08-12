@@ -41,7 +41,7 @@ export function About() {
           >
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-display font-bold mb-6">
               Zašto Odabrati{" "}
-              <span className="bg-gradient-to-r from-primary/40 to-accent bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-primary-400 to-accent-400 bg-clip-text text-transparent">
                 Nas?
               </span>
             </h2>
@@ -64,8 +64,8 @@ export function About() {
                     transition={{ duration: 0.6, delay: index * 0.1 }}
                     className="flex items-start space-x-4"
                   >
-                    <div className="flex-shrink-0 w-12 h-12 bg-primary rounded-xl flex items-center justify-center">
-                      <IconComponent className="h-6 w-6 text-violet-400" />
+                    <div className="flex-shrink-0 w-12 h-12 bg-primary-500/20 rounded-xl flex items-center justify-center">
+                      <IconComponent className="h-6 w-6 text-primary-400" />
                     </div>
                     <div>
                       <h3 className="text-lg font-bold mb-2">
@@ -106,7 +106,7 @@ export function About() {
               transition={{ duration: 0.6, delay: 0.4 }}
               className="absolute -bottom-6 -left-6 bg-white text-gray-900 p-6 rounded-xl shadow-xl"
             >
-              <div className="text-2xl font-bold text-violet-600">500+</div>
+              <div className="text-2xl font-bold text-primary-600">500+</div>
               <div className="text-sm font-medium">Zadovoljnih Klijenata</div>
             </motion.div>
 
@@ -115,7 +115,7 @@ export function About() {
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: 0.6 }}
-              className="absolute -top-6 -right-6 bg-violet-500 text-white p-6 rounded-xl shadow-xl"
+              className="absolute -top-6 -right-6 bg-primary-500 text-white p-6 rounded-xl shadow-xl"
             >
               <div className="text-2xl font-bold">10+</div>
               <div className="text-sm font-medium">Godina Iskustva</div>

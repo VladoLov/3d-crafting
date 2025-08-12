@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { ArrowRight, Sparkles, Zap, Heart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { number } from "zod";
 
 export function Hero() {
   const containerVariants = {
@@ -42,7 +43,7 @@ export function Hero() {
   };
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-violet-50 via-white to-accent/10">
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-violet-2000 via-white to-accent">
       {/* Background decorative elements */}
       <div className="absolute inset-0 overflow-hidden">
         <motion.div
@@ -56,7 +57,7 @@ export function Hero() {
           variants={floatingVariants}
           animate="animate"
           style={{ animationDelay: "2s" }}
-          className="absolute top-40 right-20 text-accent/20"
+          className="absolute top-40 right-20 text-accent"
         >
           <Zap className="h-12 w-12" />
         </motion.div>
@@ -72,7 +73,7 @@ export function Hero() {
         {/* Gradient orbs */}
         <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-violet-200 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-pulse"></div>
         <div
-          className="absolute top-1/3 right-1/4 w-72 h-72 bg-accent/20 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-pulse"
+          className="absolute top-1/3 right-1/4 w-72 h-72 bg-accent-200 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-pulse"
           style={{ animationDelay: "2s" }}
         ></div>
       </div>
@@ -86,7 +87,7 @@ export function Hero() {
         >
           {/* Badge */}
           <motion.div variants={itemVariants}>
-            <div className="inline-flex items-center px-4 py-2 rounded-full bg-violet-500 text-violet-700 text-sm font-medium">
+            <div className="inline-flex items-center px-4 py-2 rounded-full bg-violet-100 text-violet-700 text-sm font-medium">
               <Sparkles className="h-4 w-4 mr-2" />
               Personalizirani proizvodi po mjeri
             </div>
@@ -98,7 +99,7 @@ export function Hero() {
             className="text-4xl sm:text-6xl lg:text-7xl font-display font-bold text-gray-900 leading-tight"
           >
             Oživite Svoje{" "}
-            <span className="bg-gradient-to-r from-violet-500 to-accent bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-violet-600 to-violet-300 bg-clip-text text-transparent">
               Ideje
             </span>
           </motion.h1>
@@ -142,7 +143,7 @@ export function Hero() {
           </motion.div>
 
           {/* Stats */}
-          {/*     <motion.div
+          <motion.div
             variants={itemVariants}
             className="grid grid-cols-2 md:grid-cols-4 gap-8 pt-12"
           >
@@ -163,7 +164,7 @@ export function Hero() {
                 <div className="text-sm text-gray-600 mt-1">{stat.label}</div>
               </motion.div>
             ))}
-          </motion.div> */}
+          </motion.div>
         </motion.div>
       </div>
 

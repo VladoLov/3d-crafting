@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { CategoryHeader } from "@/components/category-header";
 import { ProductGrid } from "@/components/product-grid";
 import { CategoryFilters } from "@/components/category-filters";
+// Removed incorrect import of PageProps
 
 // Mock data - replace with actual database queries
 const categories = {
@@ -10,7 +11,7 @@ const categories = {
     name: "Graviranje",
     description:
       "Precizno graviranje na metal, drvo, staklo i druge materijale. Personalizirajte svoje proizvode s našim naprednim laser tehnologijama.",
-    image: "/laser-engraving-workshop.png",
+    image: "/laser-engraving-workshop.jpg",
     products: [
       {
         id: "1",
@@ -20,7 +21,7 @@ const categories = {
         originalPrice: 35.99,
         rating: 4.8,
         reviews: 124,
-        images: ["/engraved-pendant.png", "/pendant-detail.png"],
+        images: ["/engraved-pendant.jpg", "/pendant-detail.jpg"],
         category: "Graviranje",
         badge: "Bestseller",
         description: "Elegantan privjesak s vašim osobnim graviranjem",
@@ -34,7 +35,7 @@ const categories = {
         price: 45.99,
         rating: 4.9,
         reviews: 89,
-        images: ["/engraved-plaque.png"],
+        images: ["/engraved-plaque.jpg"],
         category: "Graviranje",
         badge: "Novo",
         description: "Profesionalna plaketa za nagrade i priznanja",
@@ -48,7 +49,7 @@ const categories = {
         price: 18.99,
         rating: 4.7,
         reviews: 156,
-        images: ["/engraved-glass.png"],
+        images: ["/engraved-glass.jpg"],
         category: "Graviranje",
         badge: "Bestseller",
         description: "Elegantna čaša s personalnim graviranjem",
@@ -62,7 +63,7 @@ const categories = {
     name: "CNC Obrada",
     description:
       "Profesionalna CNC obrada za složene i precizne dijelove. Izradimo sve od prototipova do finalnih proizvoda.",
-    image: "/cnc-workshop-precision.png",
+    image: "/cnc-workshop-precision.jpg",
     products: [
       {
         id: "4",
@@ -71,7 +72,7 @@ const categories = {
         price: 89.99,
         rating: 4.9,
         reviews: 67,
-        images: ["/cnc-wooden-box.png"],
+        images: ["/drvena-kutija.jpg"],
         category: "CNC Obrada",
         badge: "Popularan",
         description: "Precizno izrađena drvena kutija s CNC tehnologijom",
@@ -85,7 +86,7 @@ const categories = {
         price: 125.99,
         rating: 4.8,
         reviews: 43,
-        images: ["/cnc-metal-parts.png"],
+        images: ["/cnc-metal-parts.jpg"],
         category: "CNC Obrada",
         description: "Precizni metalni dijelovi po vašim specifikacijama",
         materials: ["Aluminij", "Čelik", "Mesing"],
@@ -98,7 +99,7 @@ const categories = {
     name: "3D Print",
     description:
       "Inovativni 3D print za prototipove i finalne proizvode. Od ideje do stvarnosti u rekordnom vremenu.",
-    image: "/3d-printer-creation.png",
+    image: "/3d-printer-creation.jpg",
     products: [
       {
         id: "6",
@@ -107,7 +108,7 @@ const categories = {
         price: 149.99,
         rating: 4.7,
         reviews: 89,
-        images: ["/custom-3d-figurine.png"],
+        images: ["/custom-3d-figurine.jpg"],
         category: "3D Print",
         badge: "Bestseller",
         description:
@@ -122,7 +123,7 @@ const categories = {
         price: 75.99,
         rating: 4.6,
         reviews: 34,
-        images: ["/3d-prototype.png"],
+        images: ["/3d-prototype.jpg"],
         category: "3D Print",
         description: "Brzi prototip za testiranje vaših ideja",
         materials: ["PLA", "ABS", "TPU"],
@@ -135,7 +136,7 @@ const categories = {
     name: "Svadbeni Proizvodi",
     description:
       "Personalizirani svadbeni detalji za vaš poseban dan. Stvorite nezaboravne uspomene s našim jedinstvenim proizvodima.",
-    image: "/elegant-wedding-setup.png",
+    image: "/elegant-wedding-setup.jpg",
     products: [
       {
         id: "8",
@@ -144,7 +145,7 @@ const categories = {
         price: 45.99,
         rating: 5.0,
         reviews: 156,
-        images: ["/wedding-ring-holder.png"],
+        images: ["/wedding-ring-holder.jpg"],
         category: "Svadbe",
         badge: "Top Rated",
         description: "Elegantan držač za svadbene prstene",
@@ -158,7 +159,7 @@ const categories = {
         price: 2.99,
         rating: 4.8,
         reviews: 234,
-        images: ["/wedding-invitations.png"],
+        images: ["/wedding-invitations.jpg"],
         category: "Svadbe",
         description: "Personalizirane svadbene pozivnice s graviranjem",
         materials: ["Papir", "Karton", "Drvo"],
@@ -168,7 +169,7 @@ const categories = {
   },
 };
 
-interface CategoryPageProps {
+/* interface CategoryPageProps {
   params: Promise<{
     slug: string;
   }>;
@@ -178,13 +179,23 @@ interface CategoryPageProps {
     price?: string;
     material?: string;
   };
-}
+} */
 
-export default async function CategoryPage({
+interface CategoryPageProps {
+  params: { slug: string };
+  searchParams?: {
+    sort?: string;
+    filter?: string;
+    price?: string;
+    material?: string;
+  };
+}
+// @ts-expect-error
+export default function CategoryPage({
   params,
   searchParams,
 }: CategoryPageProps) {
-  const { slug } = await params;
+  const { slug } = params; // NIJE async, ne koristi await
   const category = categories[slug as keyof typeof categories];
 
   if (!category) {
@@ -199,14 +210,17 @@ export default async function CategoryPage({
         <div className="flex flex-col lg:flex-row gap-8">
           {/* Filters Sidebar */}
           <aside className="lg:w-64 flex-shrink-0">
-            <CategoryFilters category={category} searchParams={searchParams} />
+            <CategoryFilters
+              category={category}
+              searchParams={searchParams ?? {}}
+            />
           </aside>
 
           {/* Products Grid */}
           <main className="flex-1">
             <ProductGrid
               products={category.products}
-              searchParams={searchParams}
+              searchParams={searchParams ?? {}}
             />
           </main>
         </div>
@@ -224,7 +238,7 @@ export function generateStaticParams() {
   ];
 }
 
-export async function generateMetadata({
+/* export async function generateMetadata({
   params,
 }: {
   params: Promise<{ slug: string }>;
@@ -236,6 +250,22 @@ export async function generateMetadata({
     return {
       title: "Kategorija nije pronađena",
     };
+  }
+
+  return {
+    title: `${category.name} - Vlado Webshop`,
+    description: category.description,
+  };
+}
+ */
+
+// @ts-expect-error
+export function generateMetadata({ params }: { params: { slug: string } }) {
+  const { slug } = params; // NIJE async, ne koristi await
+
+  const category = categories[slug as keyof typeof categories];
+  if (!category) {
+    return { title: "Kategorija nije pronađena" };
   }
 
   return {

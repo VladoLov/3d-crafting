@@ -1,20 +1,28 @@
 "use client";
 
 import { AuthGuard } from "@/components/auth/auth-guard";
-import { motion } from "framer-motion";
-import { ArrowLeft, CreditCard, Truck, Shield } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { ArrowLeft, ShoppingBag } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useCartStore } from "@/lib/store/cart-store";
+import { useCheckoutStore } from "@/lib/store/checkout-store";
+import { CheckoutSteps } from "@/components/checkout/checkout-steps";
+import { ShippingForm } from "@/components/checkout/shipping-form";
+import { BillingForm } from "@/components/checkout/billing-form";
+import { PaymentForm } from "@/components/checkout/payment-form";
+import { OrderConfirmation } from "@/components/checkout/order-confirmation";
 import { CartSummary } from "@/components/cart/cart-summary";
 import Link from "next/link";
 
 function CheckoutPageContent() {
   const { items } = useCartStore();
+  const { currentStep, setCurrentStep, canProceedToStep } = useCheckoutStore();
 
   if (items.length === 0) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
+          <ShoppingBag className="h-16 w-16 text-gray-300 mx-auto mb-4" />
           <h2 className="text-2xl font-bold text-gray-900 mb-2">
             Košarica je prazna
           </h2>
@@ -32,6 +40,33 @@ function CheckoutPageContent() {
     );
   }
 
+  const handleNext = () => {
+    if (currentStep < 4) {
+      setCurrentStep(currentStep + 1);
+    }
+  };
+
+  const handleBack = () => {
+    if (currentStep > 1) {
+      setCurrentStep(currentStep - 1);
+    }
+  };
+
+  const renderStep = () => {
+    switch (currentStep) {
+      case 1:
+        return <ShippingForm onNext={handleNext} />;
+      case 2:
+        return <BillingForm onNext={handleNext} onBack={handleBack} />;
+      case 3:
+        return <PaymentForm onNext={handleNext} onBack={handleBack} />;
+      case 4:
+        return <OrderConfirmation onBack={handleBack} />;
+      default:
+        return <ShippingForm onNext={handleNext} />;
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -47,56 +82,29 @@ function CheckoutPageContent() {
           <h1 className="text-3xl font-bold text-gray-900">Plaćanje</h1>
         </div>
 
+        {/* Progress Steps */}
+        <CheckoutSteps />
+
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Checkout Form */}
           <div className="lg:col-span-2">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="bg-white rounded-xl shadow-sm border border-gray-100 p-6"
-            >
-              <div className="text-center py-12">
-                <CreditCard className="h-16 w-16 text-gray-300 mx-auto mb-4" />
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                  Checkout funkcionalnost
-                </h3>
-                <p className="text-gray-600 mb-6">
-                  Ovdje će biti implementiran checkout proces s formama za
-                  dostavu i plaćanje.
-                </p>
-
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-md mx-auto">
-                  <div className="flex flex-col items-center p-4 border border-gray-200 rounded-lg">
-                    <Truck className="h-8 w-8 text-primary-500 mb-2" />
-                    <span className="text-sm font-medium">Dostava</span>
-                  </div>
-                  <div className="flex flex-col items-center p-4 border border-gray-200 rounded-lg">
-                    <CreditCard className="h-8 w-8 text-primary-500 mb-2" />
-                    <span className="text-sm font-medium">Plaćanje</span>
-                  </div>
-                  <div className="flex flex-col items-center p-4 border border-gray-200 rounded-lg">
-                    <Shield className="h-8 w-8 text-primary-500 mb-2" />
-                    <span className="text-sm font-medium">Sigurnost</span>
-                  </div>
-                </div>
-              </div>
-            </motion.div>
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={currentStep}
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -20 }}
+                transition={{ duration: 0.3 }}
+              >
+                {renderStep()}
+              </motion.div>
+            </AnimatePresence>
           </div>
 
           {/* Order Summary */}
           <div className="lg:col-span-1">
             <div className="sticky top-24">
               <CartSummary />
-
-              <div className="mt-6">
-                <Button className="w-full" size="lg" disabled>
-                  Završi narudžbu
-                </Button>
-                <p className="text-xs text-gray-500 text-center mt-2">
-                  Checkout funkcionalnost će biti implementirana u sljedećem
-                  koraku
-                </p>
-              </div>
             </div>
           </div>
         </div>
@@ -111,7 +119,7 @@ export default function CheckoutPage() {
       fallback={
         <div className="min-h-screen bg-gray-50 flex items-center justify-center">
           <div className="text-center">
-            <CreditCard className="h-16 w-16 text-gray-300 mx-auto mb-4" />
+            <ShoppingBag className="h-16 w-16 text-gray-300 mx-auto mb-4" />
             <h2 className="text-2xl font-bold text-gray-900 mb-2">
               Prijavite se za plaćanje
             </h2>

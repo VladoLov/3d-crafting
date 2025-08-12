@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useCartStore } from "@/lib/store/cart-store";
-import { useSession } from "@/lib/auth-client";
+import { useSession } from "next-auth/react";
 import { formatPrice } from "@/lib/utils";
 import Link from "next/link";
 
@@ -176,7 +176,7 @@ export function ProtectedCartSidebar() {
                               <Button
                                 variant="outline"
                                 size="sm"
-                                className="h-6 w-6 p-0"
+                                className="h-6 w-6 p-0 bg-transparent"
                                 onClick={() =>
                                   updateQuantity(item.id, item.quantity - 1)
                                 }
@@ -189,7 +189,7 @@ export function ProtectedCartSidebar() {
                               <Button
                                 variant="outline"
                                 size="sm"
-                                className="h-6 w-6 p-0"
+                                className="h-6 w-6 p-0 bg-transparent"
                                 onClick={() =>
                                   updateQuantity(item.id, item.quantity + 1)
                                 }
@@ -261,7 +261,7 @@ export function ProtectedCartSidebar() {
                     <div className="flex space-x-2">
                       <Button
                         variant="outline"
-                        className="flex-1"
+                        className="flex-1 bg-transparent"
                         onClick={closeCart}
                       >
                         Nastavi kupnju
