@@ -17,9 +17,9 @@ export function Navigation() {
   const navItems = [
     { href: "/", label: "Početna" },
     { href: "/kategorije/graviranje", label: "Graviranje" },
-    { href: "/kategorije/cnc", label: "CNC" },
+    { href: "/kategorije/cnc-obrada", label: "CNC" },
     { href: "/kategorije/3d-print", label: "3D Print" },
-    { href: "/kategorije/svadbe", label: "Svadbe" },
+    { href: "/kategorije/svadbeni-proizvodi", label: "Svadbe" },
     { href: "/o-nama", label: "O nama" },
   ];
 

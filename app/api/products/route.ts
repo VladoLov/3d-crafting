@@ -27,7 +27,12 @@ export async function GET(request: Request) {
       take: limit ? Number.parseInt(limit) : undefined,
     });
 
-    return NextResponse.json(products);
+    const productsWithNumberPrice = products.map((product) => ({
+      ...product,
+      price: Number(product.price),
+    }));
+
+    return NextResponse.json(productsWithNumberPrice);
   } catch (error) {
     console.error("Error fetching products:", error);
     return NextResponse.json(

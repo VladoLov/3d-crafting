@@ -9,9 +9,9 @@ rm C:\Users\lovri\Documents\Web Development\Klienti\3d crafting\vexum\.next
 # rm -rf node_modules/.cache
 
 # Reinstall dependencies to ensure clean state
-pnpm install
+#pnpm install
 
 # Generate Prisma client
-pnpm prisma generate
+#pnpm prisma generate
 
 echo "Cache cleared! Now run 'pnpm run dev' to start the development server."

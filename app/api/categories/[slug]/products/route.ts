@@ -26,7 +26,15 @@ export async function GET(
       );
     }
 
-    return NextResponse.json(category);
+    const categoryWithNumberPrices = {
+      ...category,
+      products: category.products.map((product) => ({
+        ...product,
+        price: Number(product.price),
+      })),
+    };
+
+    return NextResponse.json(categoryWithNumberPrices);
   } catch (error) {
     console.error("Error fetching category products:", error);
     return NextResponse.json(

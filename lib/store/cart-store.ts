@@ -59,7 +59,7 @@ export interface CartState {
 }
 
 const FREE_SHIPPING_THRESHOLD = 100;
-const STANDARD_SHIPPING_COST = 15;
+const STANDARD_SHIPPING_COST = 11;
 
 export const useCartStore = create<CartState>()(
   persist(

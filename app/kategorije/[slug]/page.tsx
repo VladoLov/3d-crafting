@@ -82,7 +82,7 @@ export default async function CategoryPage({
       originalPrice: Number(product.price) * 1.2,
       rating: 4.5 + Math.random() * 0.5,
       reviews: Math.floor(Math.random() * 200) + 50,
-      category: category.name,
+      category: category.slug,
       badge:
         Math.random() > 0.7
           ? "Bestseller"
@@ -143,7 +143,7 @@ export async function generateMetadata({
   }
 
   return {
-    title: `${category.name} - Vlado Webshop`,
+    title: `${category.slug} - Vlado Webshop`,
     description:
       category.description ||
       `Otkrijte našu ${category.name} kolekciju s vrhunskim proizvodima.`,

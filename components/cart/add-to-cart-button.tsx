@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { ShoppingCart, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useCartStore, CartItem } from "@/lib/store/cart-store";
+import { formatPrice } from "@/lib/utils";
 
 interface AddToCartButtonProps {
   product: any; // Replace with proper product type

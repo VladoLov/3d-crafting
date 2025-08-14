@@ -124,7 +124,11 @@ function CartPageContent() {
                             {item.selectedMaterial.name}
                             {item.selectedMaterial.price > 0 && (
                               <span className="text-primary-600 ml-1">
-                                (+{formatPrice(item.selectedMaterial.price)})
+                                (+
+                                {formatPrice(
+                                  Number(item.selectedMaterial.price)
+                                )}
+                                )
                               </span>
                             )}
                           </div>
@@ -135,7 +139,8 @@ function CartPageContent() {
                             {item.selectedSize.name}
                             {item.selectedSize.price > 0 && (
                               <span className="text-primary-600 ml-1">
-                                (+{formatPrice(item.selectedSize.price)})
+                                (+{formatPrice(Number(item.selectedSize.price))}
+                                )
                               </span>
                             )}
                           </div>
@@ -180,7 +185,7 @@ function CartPageContent() {
 
                       <div className="text-right">
                         <div className="font-semibold text-lg">
-                          {formatPrice(item.itemTotal)}
+                          {formatPrice(Number(item.itemTotal))}
                         </div>
                         {item.savings && item.savings > 0 && (
                           <div className="text-sm text-green-600">
