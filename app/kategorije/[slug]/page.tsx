@@ -44,7 +44,7 @@ async function getCategoryWithProducts(slug: string): Promise<Category | null> {
         process.env.NEXTAUTH_URL || "http://localhost:3000"
       }/api/categories/${slug}/products`,
       {
-        cache: "no-store",
+        next: { revalidate: 3600 }, // Revalidate every hour
       }
     );
 
