@@ -1,6 +1,4 @@
 "use client";
-
-import { AuthGuard } from "@/components/auth/auth-guard";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowLeft, ShoppingBag } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -13,6 +11,23 @@ import { PaymentForm } from "@/components/checkout/payment-form";
 import { OrderConfirmation } from "@/components/checkout/order-confirmation";
 import { CartSummary } from "@/components/cart/cart-summary";
 import Link from "next/link";
+
+import dynamic from "next/dynamic";
+
+const AuthGuard = dynamic(
+  () =>
+    import("@/components/auth/auth-guard").then((mod) => ({
+      default: mod.AuthGuard,
+    })),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
+      </div>
+    ),
+  }
+);
 
 function CheckoutPageContent() {
   const { items } = useCartStore();
@@ -116,7 +131,7 @@ function CheckoutPageContent() {
 export default function CheckoutPage() {
   return (
     <AuthGuard
-      fallback={
+    /*  fallback={
         <div className="min-h-screen bg-gray-50 flex items-center justify-center">
           <div className="text-center">
             <ShoppingBag className="h-16 w-16 text-gray-300 mx-auto mb-4" />
@@ -128,7 +143,7 @@ export default function CheckoutPage() {
             </p>
           </div>
         </div>
-      }
+      } */
     >
       <CheckoutPageContent />
     </AuthGuard>

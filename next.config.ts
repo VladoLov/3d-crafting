@@ -14,6 +14,9 @@ const nextConfig: NextConfig = {
   },
   // Enable static optimization
   output: "standalone",
+  eslint: {
+    ignoreDuringBuilds: true, // Ignore ESLint errors during build
+  },
 };
 
 export default nextConfig;

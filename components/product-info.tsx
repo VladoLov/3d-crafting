@@ -51,7 +51,7 @@ export function ProductInfo({ product }: ProductInfoProps) {
             variant="secondary"
             className="bg-primary-100 text-primary-700"
           >
-            {product.category}
+            {product.category.name}
           </Badge>
           {product.badge && (
             <Badge variant="default" className="bg-accent-500">

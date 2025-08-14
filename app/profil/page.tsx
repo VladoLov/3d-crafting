@@ -40,9 +40,9 @@ export default async function ProfilPage() {
             <UserProfile user={userWithDetails} />
           </TabsContent>
 
-          <TabsContent value="orders" className="mt-6">
+          {/*     <TabsContent value="orders" className="mt-6">
             <UserOrders orders={userWithDetails.orders} />
-          </TabsContent>
+          </TabsContent> */}
 
           <TabsContent value="designs" className="mt-6">
             <UserDesigns designs={userWithDetails.designs} />

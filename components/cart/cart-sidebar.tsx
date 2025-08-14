@@ -133,7 +133,9 @@ export function CartSidebar() {
                             {item.name}
                           </h4>
                           <p className="text-sm text-gray-600">
-                            {item.category}
+                            {typeof item.category === "string"
+                              ? item.category
+                              : item.category?.name || "Nepoznata kategorija"}
                           </p>
 
                           {/* Customizations */}
@@ -169,7 +171,7 @@ export function CartSidebar() {
                               <Button
                                 variant="outline"
                                 size="sm"
-                                className="h-6 w-6 p-0"
+                                className="h-6 w-6 p-0 bg-transparent"
                                 onClick={() =>
                                   updateQuantity(item.id, item.quantity - 1)
                                 }
@@ -182,7 +184,7 @@ export function CartSidebar() {
                               <Button
                                 variant="outline"
                                 size="sm"
-                                className="h-6 w-6 p-0"
+                                className="h-6 w-6 p-0 bg-transparent"
                                 onClick={() =>
                                   updateQuantity(item.id, item.quantity + 1)
                                 }
@@ -254,7 +256,7 @@ export function CartSidebar() {
                     <div className="flex space-x-2">
                       <Button
                         variant="outline"
-                        className="flex-1"
+                        className="flex-1 bg-transparent"
                         onClick={closeCart}
                       >
                         Nastavi kupnju

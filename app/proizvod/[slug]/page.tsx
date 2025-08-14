@@ -5,39 +5,54 @@ import { ProductTabs } from "@/components/product-tabs";
 import { RelatedProducts } from "@/components/related-products";
 import { ProductBreadcrumb } from "@/components/product-breadcrumb";
 
-// Mock data - replace with actual database queries
-const products = {
-  "personalizirani-privjesak": {
-    id: "1",
-    name: "Personalizirani Privjesak",
-    slug: "personalizirani-privjesak",
-    price: 25.99,
-    originalPrice: 35.99,
-    rating: 4.8,
-    reviews: 124,
-    images: [
-      "/engraved-pendant.png",
-      "/pendant-detail.png",
-      "/pendant-materials.png",
-      "/pendant-sizes.png",
-    ],
-    category: "Graviranje",
-    categorySlug: "graviranje",
-    badge: "Bestseller",
-    description:
-      "Elegantan privjesak s vašim osobnim graviranjem. Savršen poklon za posebne prilike.",
-    longDescription: `
-      Naš personalizirani privjesak je izrađen od najkvalitetnijih materijala i precizno graviran 
-      najnovijom laser tehnologijom. Možete odabrati između različitih materijala i veličina, 
-      te dodati vlastiti tekst, datum ili simbol.
-      
-      Svaki privjesak dolazi u elegantnoj poklon kutiji, što ga čini savršenim poklonom za 
-      rođendane, godišnjice, vjenčanja ili bilo koju drugu posebnu priliku.
-    `,
+interface ProductPageProps {
+  params: Promise<{
+    slug: string;
+  }>;
+}
+
+async function getProduct(slug: string) {
+  try {
+    const response = await fetch(
+      `${
+        process.env.NEXTAUTH_URL || "http://localhost:3000"
+      }/api/products/${slug}`,
+      {
+        cache: "no-store", // Ensure fresh data
+      }
+    );
+
+    if (!response.ok) {
+      return null;
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error("Error fetching product:", error);
+    return null;
+  }
+}
+
+export default async function ProductPage({ params }: ProductPageProps) {
+  const { slug } = await params;
+  const product = await getProduct(slug);
+
+  if (!product) {
+    notFound();
+  }
+
+  const transformedProduct = {
+    ...product,
+    rating: 4.8, // Mock rating for now
+    reviews: Math.floor(Math.random() * 200) + 50, // Mock reviews
+    originalPrice: product.price * 1.2, // Mock original price
+    badge: "Popularan",
+    longDescription:
+      product.description ||
+      `Detaljni opis proizvoda ${product.name}. Ovaj proizvod je izrađen s najvećom pažnjom i kvalitetom.`,
     materials: [
-      { name: "Nehrđajući čelik", price: 0, image: "/material-steel.png" },
-      { name: "Srebro", price: 15, image: "/material-silver.png" },
-      { name: "Zlato", price: 45, image: "/material-gold.png" },
+      { name: "Standard", price: 0, image: "/material-standard.jpg" },
+      { name: "Premium", price: 15, image: "/material-premium.jpg" },
     ],
     sizes: [
       { name: "S", dimensions: "20x15mm", price: 0 },
@@ -50,11 +65,9 @@ const products = {
       symbols: ["❤️", "⭐", "🌟", "💎", "🎵"],
     },
     specifications: {
-      Materijal: "Nehrđajući čelik / Srebro / Zlato",
-      Dimenzije: "20x15mm - 30x25mm",
-      Težina: "5-15g",
-      Graviranje: "Laser graviranje",
-      Pakiranje: "Elegantna poklon kutija",
+      Kategorija: product.category.name,
+      Materijal: "Visokokvalitetni materijal",
+      Dimenzije: "Prilagodljive",
       Garancija: "2 godine",
     },
     shipping: {
@@ -62,89 +75,18 @@ const products = {
       express: { days: "2-3", price: 25 },
       free: { minOrder: 100 },
     },
-    inStock: true,
+    inStock: product.isActive,
     stockCount: 15,
-  },
-  "cnc-drvena-kutija": {
-    id: "4",
-    name: "CNC Drvena Kutija",
-    slug: "cnc-drvena-kutija",
-    price: 89.99,
-    rating: 4.9,
-    reviews: 67,
-    images: [
-      "/cnc-wooden-box.png",
-      "/wooden-box-open.png",
-      "/wooden-box-detail.png",
-      "/wooden-box-materials.png",
-    ],
-    category: "CNC Obrada",
-    categorySlug: "cnc",
-    badge: "Popularan",
-    description:
-      "Precizno izrađena drvena kutija s CNC tehnologijom. Idealna za čuvanje dragocjenosti.",
-    longDescription: `
-      Naša CNC drvena kutija je remek-djelo preciznosti i zanatstva. Izrađena od najkvalitetnijih 
-      vrsta drva, svaka kutija prolazi kroz pažljiv proces CNC obrade koji osigurava savršene 
-      dimenzije i glatku površinu.
-      
-      Kutija može biti personalizirana s vašim imenom, logotipom ili posebnim dizajnom. 
-      Savršena je za čuvanje nakita, satova, dokumenata ili bilo čega što vam je dragocjeno.
-    `,
-    materials: [
-      { name: "Hrast", price: 0, image: "/wood-oak.png" },
-      { name: "Bukva", price: 10, image: "/wood-beech.png" },
-      { name: "Orah", price: 25, image: "/wood-walnut.png" },
-    ],
-    sizes: [
-      { name: "Mala", dimensions: "15x10x5cm", price: 0 },
-      { name: "Srednja", dimensions: "20x15x8cm", price: 15 },
-      { name: "Velika", dimensions: "25x20x10cm", price: 30 },
-    ],
-    customization: {
-      engraving: true,
-      logo: true,
-      interior: ["Baršun", "Svila", "Kožа"],
-    },
-    specifications: {
-      Materijal: "Masivno drvo",
-      Obrada: "CNC precizna obrada",
-      "Završna obrada": "Prirodni vosak",
-      Brava: "Metalna s ključem",
-      Unutrašnjost: "Baršunasta podstava",
-      Garancija: "5 godina",
-    },
-    shipping: {
-      standard: { days: "7-10", price: 20 },
-      express: { days: "3-5", price: 35 },
-      free: { minOrder: 150 },
-    },
-    inStock: true,
-    stockCount: 8,
-  },
-};
-
-interface ProductPageProps {
-  params: Promise<{
-    slug: string;
-  }>;
-}
-
-export default async function ProductPage({ params }: ProductPageProps) {
-  const { slug } = await params;
-  const product = products[slug as keyof typeof products];
-
-  if (!product) {
-    notFound();
-  }
+    categorySlug: product.category.slug,
+  };
 
   return (
     <div className="min-h-screen bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Breadcrumb */}
         <ProductBreadcrumb
-          category={product.category}
-          categorySlug={product.categorySlug}
+          category={product.category.name}
+          categorySlug={product.category.slug}
           productName={product.name}
         />
 
@@ -154,16 +96,16 @@ export default async function ProductPage({ params }: ProductPageProps) {
           <ProductGallery images={product.images} productName={product.name} />
 
           {/* Product Info */}
-          <ProductInfo product={product} />
+          <ProductInfo product={transformedProduct} />
         </div>
 
         {/* Product Details Tabs */}
-        <ProductTabs product={product} />
+        <ProductTabs product={transformedProduct} />
 
         {/* Related Products */}
         <RelatedProducts
-          currentProduct={product}
-          category={product.categorySlug}
+          currentProduct={transformedProduct}
+          category={product.category.slug}
         />
       </div>
     </div>
@@ -176,7 +118,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const product = products[slug as keyof typeof products];
+  const product = await getProduct(slug);
 
   if (!product) {
     return {
@@ -186,20 +128,13 @@ export async function generateMetadata({
 
   return {
     title: `${product.name} - Vlado Webshop`,
-    description: product.description,
+    description:
+      product.description || `${product.name} - ${product.category.name}`,
     openGraph: {
       title: product.name,
-      description: product.description,
-      images: [product.images[0]],
+      description:
+        product.description || `${product.name} - ${product.category.name}`,
+      images: product.images.length > 0 ? [product.images[0]] : [],
     },
   };
-}
-
-export function generateStaticParams() {
-  return [
-    { slug: "personalizirani-privjesak" },
-    { slug: "cnc-drvena-kutija" },
-    { slug: "3d-figurica-po-fotografiji" },
-    { slug: "svadbeni-prsteni-drzac" },
-  ];
 }

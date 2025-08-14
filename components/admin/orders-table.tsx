@@ -2,7 +2,14 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Eye, MoreHorizontal, Search, Filter, Download } from "lucide-react";
+import {
+  Eye,
+  MoreHorizontal,
+  Search,
+  Filter,
+  Download,
+  ShoppingBag,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";

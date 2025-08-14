@@ -17,27 +17,28 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useCheckoutStore } from "@/lib/store/checkout-store";
-import { BillingAddress } from "@/lib/types/checkout";
+import type { BillingAddress } from "@/lib/types/checkout";
 
 const billingSchema = z
   .object({
     sameAsShipping: z.boolean(),
-    firstName: z.string().min(2, "Ime mora imati najmanje 2 znaka").optional(),
-    lastName: z
-      .string()
-      .min(2, "Prezime mora imati najmanje 2 znaka")
-      .optional(),
-    email: z.string().email("Unesite valjanu email adresu").optional(),
-    phone: z.string().min(8, "Unesite valjan broj telefona").optional(),
+    firstName: z.string().min(2, "Ime mora imati najmanje 2 znaka"),
+    lastName: z.string().min(2, "Prezime mora imati najmanje 2 znaka"),
+    email: z.string().email("Unesite valjanu email adresu"),
+    phone: z.string().min(8, "Unesite valjan broj telefona"),
     company: z.string().optional(),
-    address: z.string().min(5, "Unesite valjanu adresu").optional(),
-    city: z.string().min(2, "Unesite valjan grad").optional(),
-    postalCode: z.string().min(4, "Unesite valjan poštanski broj").optional(),
-    country: z.string().optional(),
+    address: z.string().min(5, "Unesite valjanu adresu"),
+    city: z.string().min(2, "Unesite valjan grad"),
+    postalCode: z.string().min(4, "Unesite valjan poštanski broj"),
+    country: z.string().min(1, "Odaberite zemlju"),
   })
   .refine(
     (data) => {
+      // When sameAsShipping is true, we don't need to validate other fields
+      // as they will be copied from shipping address
       if (data.sameAsShipping) return true;
+
+      // When sameAsShipping is false, all required fields must be filled
       return !!(
         data.firstName &&
         data.lastName &&

@@ -164,7 +164,7 @@ export const DesignSchema = z.object({
   type: DesignTypeEnum,
   fileUrl: z.string().url("Mora biti valjana URL adresa"),
   thumbnailUrl: z.string().url("Mora biti valjana URL adresa").nullable(),
-  metadata: z.record(z.any()).nullable(),
+  metadata: z.record(z.string(), z.any()).nullable(),
   createdAt: z.date(),
   updatedAt: z.date(),
 });
@@ -176,7 +176,7 @@ export const CreateDesignSchema = z.object({
   type: DesignTypeEnum,
   fileUrl: z.string().url("Mora biti valjana URL adresa"),
   thumbnailUrl: z.string().url("Mora biti valjana URL adresa").optional(),
-  metadata: z.record(z.any()).optional(),
+  metadata: z.record(z.string(), z.any()).optional(),
 });
 
 // Auth schemas

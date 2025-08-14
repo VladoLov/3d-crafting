@@ -97,7 +97,11 @@ function CartPageContent() {
                             {item.name}
                           </Link>
                         </h3>
-                        <p className="text-sm text-gray-600">{item.category}</p>
+                        <p className="text-sm text-gray-600">
+                          {typeof item.category === "string"
+                            ? item.category
+                            : item.category?.name}
+                        </p>
                       </div>
                       <Button
                         variant="ghost"
@@ -216,7 +220,7 @@ function CartPageContent() {
 export default function CartPage() {
   return (
     <AuthGuard
-      fallback={
+    /*  fallback={
         <div className="min-h-screen bg-gray-50 flex items-center justify-center">
           <div className="text-center">
             <ShoppingBag className="h-16 w-16 text-gray-300 mx-auto mb-4" />
@@ -229,7 +233,7 @@ export default function CartPage() {
             </p>
           </div>
         </div>
-      }
+      } */
     >
       <CartPageContent />
     </AuthGuard>

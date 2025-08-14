@@ -9,7 +9,7 @@ export interface CartItem {
   price: number;
   originalPrice?: number;
   image: string;
-  category: string;
+  category: string | { id: string; name: string; slug: string };
   quantity: number;
 
   // Customization options
@@ -33,6 +33,7 @@ export interface CartItem {
 export interface CartState {
   items: CartItem[];
   isOpen: boolean;
+  setIsOpen: (isOpen: boolean) => void;
 
   // Actions
   addItem: (item: Omit<CartItem, "id" | "itemTotal">) => void;
@@ -65,6 +66,7 @@ export const useCartStore = create<CartState>()(
     (set, get) => ({
       items: [],
       isOpen: false,
+      setIsOpen: (isOpen) => set({ isOpen }),
 
       addItem: (newItem) => {
         const items = get().items;

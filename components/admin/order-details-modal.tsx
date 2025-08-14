@@ -272,10 +272,10 @@ export function OrderDetailsModal({
                         {order.paymentMethod.type === "card" &&
                           "Kreditna/Debitna kartica"}
                         {order.paymentMethod.type === "paypal" && "PayPal"}
+                        {order.paymentMethod.type === "cash_on_delivery" &&
+                          "Gotovina pri dostavi"}
                         {order.paymentMethod.type === "bank" &&
                           "Bankovni transfer"}
-                        {order.paymentMethod.type === "cash" &&
-                          "Gotovina pri dostavi"}
                       </p>
                       {order.paymentMethod.cardNumber && (
                         <p>{order.paymentMethod.cardNumber}</p>

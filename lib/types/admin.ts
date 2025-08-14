@@ -1,3 +1,35 @@
+/**
+ * @file This file contains type definitions for administrative dashboards and order management.
+ */
+
+// Define a base Address interface to ensure consistency between shipping and billing addresses.
+export interface Address {
+  firstName: string;
+  lastName: string;
+  address: string;
+  city: string;
+  state?: string; // Made optional as it may not be present in all countries
+  postalCode: string;
+  country: string;
+  email?: string;
+  phone?: string;
+}
+
+// Updated ShippingAddress and BillingAddress interfaces, inheriting from the base Address interface.
+export interface ShippingAddress extends Address {}
+
+export interface BillingAddress extends Address {
+  sameAsShipping?: boolean;
+}
+
+export interface PaymentMethod {
+  type: "card" | "paypal" | "cash_on_delivery" | "bank";
+  cardBrand?: string;
+  last4?: string;
+  cardNumber?: string;
+}
+
+// Existing interfaces from your provided code
 export interface AdminUser {
   id: string;
   email: string;

@@ -68,10 +68,6 @@ export function ProtectedCartButton() {
       <AuthModal
         isOpen={showAuthModal}
         onClose={() => setShowAuthModal(false)}
-        onSuccess={() => {
-          setShowAuthModal(false);
-          toggleCart();
-        }}
       />
     </>
   );
